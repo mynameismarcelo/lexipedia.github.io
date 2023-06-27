@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cronômetro Regressivo</title>
+</head>
+<link rel="stylesheet" href="style.css">
+<body>
+    <h1 id="countdown">00:00:00</h1>
+  <div class="buttons-container">
+    <button onclick="startCountdown(2400, 1560)">Customs</button>
+    <button onclick="startCountdown(2400, 1560)">Reserve</button>
+    <button onclick="startCountdown(2400, 1560)">Woods</button>
+    <button onclick="startCountdown(2400, 1560)">Interchange</button>
+    <button onclick="startCountdown(2700, 1860)">Shoreline</button>
+    <button onclick="startCountdown(2400, 1560)">Lighthouse</button>
+  </div>
+  <button id="stopButton" onclick="stopCountdown()" disabled>Parar Cronômetro</button>
+  
+  <script>
+    let intervalId;
+
+    // Função para formatar o tempo em HH:MM:SS
+    function formatTime(time) {
+      let hours = Math.floor(time / 3600);
+      let minutes = Math.floor((time % 3600) / 60);
+      let seconds = time % 60;
+
+      hours = String(hours).padStart(2, '0');
+      minutes = String(minutes).padStart(2, '0');
+      seconds = String(seconds).padStart(2, '0');
+
+      return `${hours}:${minutes}:${seconds}`;
+    }
+
+    // Função para iniciar o cronômetro
+    function startCountdown(time, alertTime) {
+      const countdownElement = document.getElementById('countdown');
+      const buttons = document.querySelectorAll('button');
+
+      // Desativa todos os botões, exceto o botão "Parar Cronômetro"
+      buttons.forEach(button => {
+        button.disabled = true;
+      });
+      document.getElementById('stopButton').disabled = false;
+
+      // Atualiza o cronômetro a cada segundo
+      let currentTime = time;
+      countdownElement.textContent = formatTime(currentTime);
+
+      intervalId = setInterval(() => {
+        currentTime--;
+
+        countdownElement.textContent = formatTime(currentTime);
+
+        if (currentTime === alertTime) {
+          if (currentTime === 1860) {
+            alert('Restam 31 minutos!');
+          } else {
+            alert('Restam 26 minutos!');
+          }
+        }
+
+        if (currentTime <= 0) {
+          clearInterval(intervalId);
+
+          // Reativa todos os botões, exceto o botão "Parar Cronômetro"
+          buttons.forEach(button => {
+            button.disabled = false;
+          });
+          document.getElementById('stopButton').disabled = true;
+
+          alert('Tempo esgotado!');
+        }
+      }, 1000);
+    }
+
+    // Função para parar o cronômetro
+    function stopCountdown() {
+      clearInterval(intervalId);
+
+      // Reativa todos os botões, exceto o botão "Parar Cronômetro"
+      const buttons = document.querySelectorAll('button');
+      buttons.forEach(button => {
+        button.disabled = false;
+      });
+      document.getElementById('stopButton').disabled = true;
+    }
+  </script>
+</body>
+</html>
